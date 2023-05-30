@@ -3,7 +3,7 @@ const centimeterEl = document.querySelector("#centimeter");
 const meterEl = document.querySelector("#meter");
 const kilometerEl = document.querySelector("#kilometer");
 
-function millimeter(value) {
+function milimeter(value) {
 	centimeterEl.value = value / 10;
 	meterEl.value = value / 1000;
 	kilometerEl.value = value / 1000000;
