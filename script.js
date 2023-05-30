@@ -1,28 +1,29 @@
-const millimeterEl = document.querySelector("#millimeter");
-const centimeterEl = document.querySelector("#centimeter");
-const meterEl = document.querySelector("#meter");
-const kilometerEl = document.querySelector("#kilometer");
+function fetchUserDetails() {
+    const username = document.getElementById("username").value;
+    const userDetailsElement = document.getElementById("user-details");
+    userDetailsElement.innerHTML = "";
 
-function milimeter(value) {
-	centimeterEl.value = value / 10;
-	meterEl.value = value / 1000;
-	kilometerEl.value = value / 1000000;
-}
+    fetch(`https://api.github.com/users/${username}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.message === "Not Found") {
+                userDetailsElement.innerHTML = "User not found.";
+            } else {
+                const name = data.name || "N/A";
+                const repos = data.public_repos || 0;
+                const followers = data.followers || 0;
+                const profileUrl = data.html_url;
 
-function centimeter(value) {
-	millimeterEl.value = value * 10;
-	meterEl.value = value / 100;
-	kilometerEl.value = value / 100000;
-}
-
-function meter(value) {
-	millimeterEl.value = value * 1000;
-	centimeterEl.value = value * 100;
-	kilometerEl.value = value / 1000;
-}
-
-function kilometer(value) {
-	millimeterEl.value = value * 1000000;
-	centimeterEl.value = value * 10000;
-	meterEl.value = value * 1000;
+                const userDetailsHtml = `
+                    <p><strong>Name:</strong> ${name}</p>
+                    <p><strong>Repositories:</strong> ${repos}</p>
+                    <p><strong>Followers:</strong> ${followers}</p>
+                    <p><a href="${profileUrl}" target="_blank">View Profile</a></p>
+                `;
+                userDetailsElement.innerHTML = userDetailsHtml;
+            }
+        })
+        .catch(error => {
+            userDetailsElement.innerHTML = "An error occurred. Please try again.";
+        });
 }
